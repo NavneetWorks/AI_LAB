@@ -1,0 +1,49 @@
+import heapq
+
+graph = {
+    'S': [('A', 1), ('B', 4)],
+    'A': [('C', 2), ('D', 5)],
+    'B': [('D', 1)],
+    'C': [('G', 5)],
+    'D': [('G', 3)],
+    'G': []
+}
+
+h = {
+    'S': 5, 'A': 4, 'B': 2,
+    'C': 3, 'D': 1, 'G': 0
+}
+
+def astar(start, goal):
+    pq = [(h[start], 0, start)]
+    cost = {start: 0}
+    parent = {start: None}
+
+    while pq:
+        f, g, node = heapq.heappop(pq)
+
+        if g != cost[node]:
+            continue
+
+        if node == goal:
+            path = []
+            while node is not None:
+                path.append(node)
+                node = parent[node]
+
+            print("Path:", " -> ".join(path[::-1]))
+            print("Total cost:", g)
+            return
+
+        for neighbor, weight in graph[node]:
+            new_g = g + weight
+
+            if neighbor not in cost or new_g < cost[neighbor]:
+                cost[neighbor] = new_g
+                parent[neighbor] = node
+                new_f = new_g + h[neighbor]
+                heapq.heappush(pq, (new_f, new_g, neighbor))
+
+    print("No path found")
+
+astar('S', 'G')
