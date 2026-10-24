@@ -1,0 +1,33 @@
+import random
+import math
+
+random.seed(42)
+
+def cost(x):
+    return (x - 3) ** 2
+
+current = 0
+best = current
+temperature = 100
+cooling_rate = 0.95
+
+for i in range(500):
+    neighbor = current + random.choice([-1, 1])
+
+    delta = cost(neighbor) - cost(current)
+
+    if delta < 0:
+        current = neighbor
+    else:
+        probability = math.exp(-delta / temperature)
+
+        if random.random() < probability:
+            current = neighbor
+
+    if cost(current) < cost(best):
+        best = current
+
+    temperature *= cooling_rate
+
+print("Best solution:", best)
+print("Minimum cost:", cost(best))
