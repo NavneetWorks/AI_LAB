@@ -1,0 +1,40 @@
+graph = {
+    'A': ['B', 'C'],
+    'B': ['D', 'E'],
+    'C': ['F', 'G'],
+    'D': [], 'E': [], 'F': [], 'G': []
+}
+
+def dls(node, goal, limit, path, visited):
+    visited.append(node)
+
+    if node == goal:
+        path.append(node)
+        return True
+
+    if limit == 0:
+        return False
+
+    for neighbor in graph[node]:
+        if dls(neighbor, goal, limit - 1, path, visited):
+            path.append(node)
+            return True
+
+    return False
+
+def ids(start, goal):
+    depth = 0
+
+    while True:
+        path = []
+        visited = []
+
+        if dls(start, goal, depth, path, visited):
+            print("Goal found:", goal)
+            print("Path:", " -> ".join(path[::-1]))
+            return
+
+        print("Depth", depth, ":", visited)
+        depth += 1
+
+ids('A', 'G')
